@@ -1,4 +1,4 @@
-package borisov.producer.events;
+package borisov.producer.event;
 
 public enum OperationType {
     CREATE,

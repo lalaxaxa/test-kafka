@@ -1,9 +1,9 @@
-package borisov.producer.controllers;
+package borisov.producer.controller;
 
 import borisov.producer.dto.CreateUserDTO;
 import borisov.producer.dto.ResponseUserDTO;
-import borisov.producer.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import borisov.producer.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,12 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     @PostMapping
     public ResponseEntity<ResponseUserDTO> create(@RequestBody CreateUserDTO createUserDTO){

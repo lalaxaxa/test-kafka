@@ -12,9 +12,11 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
         spring.json.add.type.headers: false
-
-custom:
-  kafka:
-    enabled-java-config: true
-    topics:
-      user-events: user-events-topic
+    custom:
+      enabled-java-config: true
+      topic:
+        user-event: user-events-topic
+        partitions: 3
+        replicas: 1
+        configs:
+          min.insync.replicas: 1

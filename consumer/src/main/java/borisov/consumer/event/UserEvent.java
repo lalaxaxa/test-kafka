@@ -1,6 +1,11 @@
-package borisov.producer.events;
+package borisov.consumer.event;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 
 @NoArgsConstructor
 @AllArgsConstructor

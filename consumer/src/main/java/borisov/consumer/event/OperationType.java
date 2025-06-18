@@ -1,4 +1,4 @@
-package borisov.consumer.events;
+package borisov.consumer.event;
 
 public enum OperationType {
     CREATE,

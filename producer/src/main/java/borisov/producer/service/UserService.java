@@ -1,4 +1,4 @@
-package borisov.producer.services;
+package borisov.producer.service;
 
 import borisov.producer.dto.CreateUserDTO;
 import borisov.producer.dto.ResponseUserDTO;
