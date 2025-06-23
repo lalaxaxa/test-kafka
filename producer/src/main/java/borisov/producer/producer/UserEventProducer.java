@@ -1,6 +1,6 @@
 package borisov.producer.producer;
 
-import borisov.producer.config.CustomKafkaProperties;
+import borisov.producer.config.KafkaTopics;
 import borisov.producer.event.UserEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +15,18 @@ import java.util.concurrent.CompletableFuture;
 public class UserEventProducer {
 
     private final KafkaTemplate<String, UserEvent> kafkaTemplate;
-    private final CustomKafkaProperties customKafkaProperties;
+    private final KafkaTopics kafkaTopics;
 
     @Autowired
     public UserEventProducer(KafkaTemplate<String, UserEvent> kafkaTemplate,
-                             CustomKafkaProperties customKafkaProperties) {
+                             KafkaTopics kafkaTopics) {
         this.kafkaTemplate = kafkaTemplate;
-        this.customKafkaProperties = customKafkaProperties;
+        this.kafkaTopics = kafkaTopics;
     }
 
     public void sendEvent(UserEvent userEvent) {
         CompletableFuture<SendResult<String, UserEvent>> future =
-                kafkaTemplate.send(customKafkaProperties.getTopic().getUserEvent(), String.valueOf(userEvent.getId()), userEvent);
+                kafkaTemplate.send(kafkaTopics.getUserEvent(), String.valueOf(userEvent.getId()), userEvent);
 
         future.whenComplete((result, exception) -> {
             if (exception != null) {

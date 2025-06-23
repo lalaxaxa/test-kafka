@@ -3,7 +3,6 @@ package borisov.consumer.config;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +14,6 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 import java.util.HashMap;
 import java.util.Map;
 @Configuration
-@ConditionalOnProperty(name = "spring.kafka.custom.enabled-java-config", havingValue = "true", matchIfMissing = false)
 @Slf4j
 @RequiredArgsConstructor
 public class KafkaConsumerConfig {
@@ -24,7 +22,6 @@ public class KafkaConsumerConfig {
 
     @Bean
     ConsumerFactory<String, Object> consumeFactory(){
-        log.info("Kafka use java-configuration");
         Map<String, Object> config = new HashMap<>();
         KafkaProperties.Consumer consumer = kafkaProperties.getConsumer();
 

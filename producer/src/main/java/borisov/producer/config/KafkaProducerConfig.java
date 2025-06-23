@@ -3,14 +3,10 @@ package borisov.producer.config;
 import borisov.producer.event.UserEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.config.TopicConfig;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
@@ -20,16 +16,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-@ConditionalOnProperty(name = "spring.kafka.custom.enabled-java-config", havingValue = "true", matchIfMissing = false)
 @Slf4j
 @RequiredArgsConstructor
 public class KafkaProducerConfig {
 
     private final KafkaProperties kafkaProperties;
-    private final CustomKafkaProperties customKafkaProperties;
 
     Map<String, Object> producerConfigs() {
-        log.info("Kafka use java-configuration");
         Map<String, Object> config = new HashMap<>();
         KafkaProperties.Producer producer = kafkaProperties.getProducer();
 
@@ -51,16 +44,5 @@ public class KafkaProducerConfig {
         return new KafkaTemplate<String, UserEvent>(producerFactory());
     }
 
-    @Bean
-    public NewTopic createTopic(){
-        CustomKafkaProperties.Topic topic = customKafkaProperties.getTopic();
-        return TopicBuilder
-                .name(topic.getUserEvent())
-                .partitions(topic.getPartitions())
-                .replicas(topic.getReplicas())
-                .configs(Map.of(TopicConfig.MIN_IN_SYNC_REPLICAS_CONFIG,
-                        topic.getConfigs().get(TopicConfig.MIN_IN_SYNC_REPLICAS_CONFIG)))
-                .build();
-    }
 
 }

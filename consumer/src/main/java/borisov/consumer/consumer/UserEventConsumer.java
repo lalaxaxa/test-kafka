@@ -10,9 +10,13 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class UserEventConsumer {
 
-    @KafkaListener(topics = "${spring.kafka.custom.topic.user-event}", groupId = "${spring.kafka.consumer.group-id}")
+    @KafkaListener(topics = "#{@kafkaTopics.userEvent}")
     public void consume(ConsumerRecord<String, UserEvent> record){
-        log.info("Получено сообщение из Kafka: {}", record.value());
+        log.info("Получено сообщение из Kafka Topic={} Partition={}, Offset={}: {}",
+                record.topic(),
+                record.partition(),
+                record.offset(),
+                record.value());
     }
 
 }
