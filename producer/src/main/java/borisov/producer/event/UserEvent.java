@@ -12,7 +12,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class UserEvent {
-    private int id;
+    private int userId;
     private String email;
     private OperationType operationType;
 }

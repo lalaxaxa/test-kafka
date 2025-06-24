@@ -26,7 +26,7 @@ public class UserEventProducer {
 
     public void sendEvent(UserEvent userEvent) {
         CompletableFuture<SendResult<String, UserEvent>> future =
-                kafkaTemplate.send(kafkaTopics.getUserEvent(), String.valueOf(userEvent.getId()), userEvent);
+                kafkaTemplate.send(kafkaTopics.getUserEvent(), String.valueOf(userEvent.getUserId()), userEvent);
 
         future.whenComplete((result, exception) -> {
             if (exception != null) {

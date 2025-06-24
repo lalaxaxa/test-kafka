@@ -2,7 +2,6 @@ package borisov.producer.config;
 
 import borisov.producer.event.UserEvent;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-@Slf4j
 @RequiredArgsConstructor
 public class KafkaProducerConfig {
 
@@ -25,7 +23,6 @@ public class KafkaProducerConfig {
     Map<String, Object> producerConfigs() {
         Map<String, Object> config = new HashMap<>();
         KafkaProperties.Producer producer = kafkaProperties.getProducer();
-
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, producer.getKeySerializer());
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, producer.getValueSerializer());

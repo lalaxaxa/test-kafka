@@ -1,0 +1,40 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: consumer
+
+  kafka:
+    bootstrap-servers: localhost:29092
+    consumer:
+      group-id: test-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.value.default.type: borisov.consumer.event.UserEvent
+        spring.json.trusted.packages: "*"
+        spring.json.use.type.headers: false
+    topics:
+      user-event: user-events-topic
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5434/consumer-db
+    username: postgres
+    password: postgres
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        show_sql: false
+
+  cloud:
+    openfeign:
+      client:
+        config:
+          submit-logging:
+            url: http://localhost:8080/users/submit_logging

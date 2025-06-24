@@ -1,5 +1,7 @@
 package borisov.producer.dto;
 
+
+import borisov.producer.event.OperationType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,9 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponseUserDTO {
+public class UserEventsLoggingSubmit {
     private int id;
-    private String name;
-    private String email;
-    private Integer age;
+    private OperationType operationType;
 }

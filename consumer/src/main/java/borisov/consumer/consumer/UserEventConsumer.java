@@ -1,6 +1,8 @@
 package borisov.consumer.consumer;
 
 import borisov.consumer.event.UserEvent;
+import borisov.consumer.service.UserEventsLogService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -8,7 +10,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class UserEventConsumer {
+    private  final UserEventsLogService userEventsLogService;
 
     @KafkaListener(topics = "#{@kafkaTopics.userEvent}")
     public void consume(ConsumerRecord<String, UserEvent> record){
@@ -17,6 +21,7 @@ public class UserEventConsumer {
                 record.partition(),
                 record.offset(),
                 record.value());
+        userEventsLogService.save(record.value());
     }
 
 }
