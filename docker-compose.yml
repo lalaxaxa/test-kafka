@@ -1,31 +1,30 @@
 version: '3.8'
 
 services:
-  zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-    ports:
-      - "2181:2181"
 
   kafka:
-    image: confluentinc/cp-kafka:latest
-    depends_on:
-      - zookeeper
+    image: bitnami/kafka:3.8
     ports:
       - "9092:9092"    # внутренний порт, для других контейнеров
       - "29092:29092"  # внешний порт, для подключения с хоста (например, через IDE)
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:29092
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      # Основные параметры KRaft
+      KAFKA_CFG_NODE_ID: 1
+      KAFKA_KRAFT_CLUSTER_ID: PvjHlx7ESeesq55jEb6Efw
+      KAFKA_CFG_PROCESS_ROLES: controller,broker
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      # Настройка листенеров
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:29092
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,EXTERNAL://localhost:29092
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      # Дополнительно
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "true"
+      ALLOW_PLAINTEXT_LISTENER: "yes"
 
   postgres-producer:
-    image: postgres:latest
+    image: postgres:13-alpine
     environment:
       POSTGRES_DB: producer-db
       POSTGRES_USER: postgres
@@ -34,7 +33,7 @@ services:
       - "5433:5432"
 
   postgres-consumer:
-    image: postgres:latest
+    image: postgres:13-alpine
     environment:
       POSTGRES_DB: consumer-db
       POSTGRES_USER: postgres
@@ -42,30 +41,30 @@ services:
     ports:
       - "5434:5432"
 
-  producer:
-    build: ./producer
-    ports:
-      - "8080:8080"
-    depends_on:
-      - kafka
-      - postgres-producer
-    environment:
-      SPRING_PROFILES_ACTIVE: prod
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-producer:5432/producer-db
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-
-  consumer:
-    build: ./consumer
-    ports:
-      - "8081:8081"
-    depends_on:
-      - kafka
-      - postgres-consumer
-    environment:
-      SPRING_PROFILES_ACTIVE: prod
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-consumer:5432/consumer-db
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+#  producer:
+#    build: ./producer
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - kafka
+#      - postgres-producer
+#    environment:
+#      SPRING_PROFILES_ACTIVE: prod
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-producer:5432/producer-db
+#      SPRING_DATASOURCE_USERNAME: postgres
+#      SPRING_DATASOURCE_PASSWORD: postgres
+#      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+#
+#  consumer:
+#    build: ./consumer
+#    ports:
+#      - "8081:8081"
+#    depends_on:
+#      - kafka
+#      - postgres-consumer
+#    environment:
+#      SPRING_PROFILES_ACTIVE: prod
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-consumer:5432/consumer-db
+#      SPRING_DATASOURCE_USERNAME: postgres
+#      SPRING_DATASOURCE_PASSWORD: postgres
+#      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092

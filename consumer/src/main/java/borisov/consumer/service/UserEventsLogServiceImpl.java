@@ -2,10 +2,11 @@ package borisov.consumer.service;
 
 import borisov.consumer.client.ExternalService;
 import borisov.consumer.dto.UserEventsLogResponse;
-import borisov.consumer.event.UserEvent;
+
 import borisov.consumer.mapper.UserEventsLogMapper;
 import borisov.consumer.model.UserEventsLog;
 import borisov.consumer.repository.UserEventsLogRepository;
+import event.UserEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

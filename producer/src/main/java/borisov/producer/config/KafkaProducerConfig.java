@@ -1,6 +1,7 @@
 package borisov.producer.config;
 
-import borisov.producer.event.UserEvent;
+
+import event.UserEvent;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;

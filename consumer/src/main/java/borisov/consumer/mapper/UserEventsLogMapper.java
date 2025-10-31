@@ -1,20 +1,18 @@
 package borisov.consumer.mapper;
 
 import borisov.consumer.dto.UserEventsLogResponse;
-import borisov.consumer.event.UserEvent;
+
 import borisov.consumer.model.UserEventsLog;
-import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
+import event.UserEvent;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class UserEventsLogMapper {
     private final ModelMapper modelMapper;
 
-    @PostConstruct
-    public void setup() {
+    public UserEventsLogMapper(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
         modelMapper.typeMap(UserEvent.class, UserEventsLog.class)
                 .addMappings(mapper -> mapper.skip(UserEventsLog::setId)); // не мапим id
     }

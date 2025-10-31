@@ -2,14 +2,16 @@ package borisov.producer.service;
 
 import borisov.producer.dto.UserEventsLoggingSubmit;
 import borisov.producer.dto.UserResponse;
-import borisov.producer.event.OperationType;
+
 import borisov.producer.dto.UserCreateRequest;
-import borisov.producer.event.UserEvent;
+
 import borisov.producer.mapper.UserMapper;
 import borisov.producer.model.User;
 import borisov.producer.producer.UserEventProducer;
 import borisov.producer.repository.UserRepository;
 import borisov.producer.exception.UserEmailAlreadyExistException;
+import event.OperationType;
+import event.UserEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
